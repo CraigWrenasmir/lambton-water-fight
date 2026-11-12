@@ -148,16 +148,6 @@
   }
   .kid[data-status]:not([data-status=""]) .ask { display: none; }
 
-  .drop {
-    position: absolute; width: 8px; height: 8px; background: #3fb0ee;
-    box-shadow: 0 0 0 2px #fff inset; display: none;
-  }
-  .kid[data-status="yes"] .drop { display: block; animation: squirt 1.1s linear infinite; }
-  @keyframes squirt {
-    0% { transform: translate(0,0); opacity: 1; }
-    100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
-  }
-
   .status {
     font-family: "Press Start 2P", monospace; font-size: 12px;
     margin: 12px 0 10px; min-height: 1.4em;
@@ -223,7 +213,7 @@
   <section class="host" id="host">
     <h2>HENRY'S CONTROLS</h2>
     <label for="det"><b>When and where</b> (everyone sees this at the top)</label>
-    <textarea id="det" placeholder="e.g. Saturday 10am at Lambton Pool. Bring a towel and a water pistol!"></textarea>
+    <textarea id="det" placeholder="e.g. Saturday 10am at Lambton Pool. Bring a towel!"></textarea>
     <div class="row">
       <button class="b-save" id="save">Save note</button>
       <button class="b-close" id="close">Close the invite</button>
@@ -266,13 +256,6 @@
     "....kssk.kssk...",
     "...kkkkk.kkkkk..",
   ];
-  const PISTOL = { x: 14, y: 12, rows: [
-    ".kkkkk",
-    "kgggggk",
-    "kgGkkk",
-    "kgk",
-    "kkk",
-  ]};
   const HAIR = {
     Magnus: [ // wild blonde
       "...h..h..h..h...",
@@ -333,7 +316,6 @@
   function drawKid(canvas, name) {
     let g = grid();
     stamp(g, BASE, OX, OY);
-    stamp(g, PISTOL.rows, OX + PISTOL.x, OY + PISTOL.y);
     stamp(g, HAIR[name], OX, OY);
     g = outline(g);
     canvas.width = W; canvas.height = H;
@@ -397,18 +379,6 @@
     drawKid(el.querySelector("canvas.sprite"), name);
     drawCross(el.querySelector(".mark canvas"));
     drawTick(el.querySelector(".badge canvas"));
-    // water droplets shooting from the pistol
-    const stage = el.querySelector(".stage");
-    for (let i = 0; i < 4; i++) {
-      const d = document.createElement("span");
-      d.className = "drop";
-      d.style.left = "calc(50% + 70px)";
-      d.style.top = "128px";
-      d.style.setProperty("--dx", (40 + i * 18) + "px");
-      d.style.setProperty("--dy", (-30 + i * 20) + "px");
-      d.style.animationDelay = (i * 0.25) + "s";
-      stage.appendChild(d);
-    }
     el.querySelectorAll("button").forEach(b =>
       b.addEventListener("click", () => answer(name, b.dataset.v)));
     kidsEl.appendChild(el);
